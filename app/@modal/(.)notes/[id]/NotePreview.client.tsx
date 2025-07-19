@@ -1,0 +1,45 @@
+'use client'
+import css from './NotePreview.client.module.css'
+import { useRouter } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import Modal from '../../../../components/Modal/Modal'
+import { fetchCurrNoteById } from '../../../../lib/api/clientApi'
+
+type NotePreviewProps = {
+  id: string
+}
+
+export default function NotePreview({ id }: NotePreviewProps) {
+  const router = useRouter()
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['noteId', id],
+    queryFn: () => fetchCurrNoteById(id),
+    refetchOnMount: false,
+  })
+  if (isLoading) return <p>Loading, please wait...</p>
+  if (error) return <p>Something went wrong.</p>
+  return (
+    <Modal
+      toClose={() => {
+        router.back()
+      }}
+    >
+      <div className={css.container}>
+        {data && (
+          <div className={css.item}>
+            <button className={css.backBtn} onClick={() => router.back()}>
+              Назад
+            </button>
+            <div className={css.header}>
+              <h2>{data.title}</h2>
+              {data.tag && <span className={css.tag}>{data.tag}</span>}
+            </div>
+            <div className={css.content}>{data.content}</div>
+            <div className={css.date}>{new Date(data.createdAt).toLocaleDateString('uk-UA')}</div>
+          </div>
+        )}
+      </div>
+    </Modal>
+  )
+}
