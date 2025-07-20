@@ -27,10 +27,9 @@ export default function AuthProvider({ children }: Props) {
           setIsAuthenticated(true)
         } else {
           cleanAuth()
-          router.push('/sign-in')
         }
       } catch {
-        setIsAuthenticated(false)
+        cleanAuth()
       } finally {
         setIsLoading(false)
       }

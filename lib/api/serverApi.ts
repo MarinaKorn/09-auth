@@ -21,7 +21,7 @@ export const checkSession = async () => {
       Cookie: cookieStore.toString(),
     },
   })
-  return res.data
+  return res
 }
 
 export const fetchNoteById = async (id: string): Promise<Note> => {
