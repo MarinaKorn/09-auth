@@ -24,7 +24,6 @@ export default function NotesClient({ tag }: NotesClientProps) {
     queryKey: ['notes', debouncedText, page, tag],
     queryFn: () => getNotes(debouncedText, page, tag),
     placeholderData: keepPreviousData,
-    //initialData: initialNotes,
     refetchOnMount: false,
   })
 
@@ -60,7 +59,8 @@ export default function NotesClient({ tag }: NotesClientProps) {
 
       {data?.notes?.length === 0 && !isFetching && <p>There are no notes found for your request</p>}
 
-      {data && data?.notes?.length > 0 && <NoteList notes={data.notes} />}
+     {Array.isArray(data?.notes) && data.notes.length > 0 && <NoteList notes={data.notes} />}
+
     </div>
   )
 }
